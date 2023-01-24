@@ -1,0 +1,22 @@
+# These are the only two asset folders that should be included.  Left here
+# so you can see what we're trying to do.
+#  Assets/IT4080
+#  Assets/IT4080.meta
+Assets/Prefabs                  export-ignore
+Assets/Prefabs.meta             export-ignore
+Assets/Scenes                   export-ignore
+Assets/Scenes.meta              export-ignore
+Assets/TestScenes               export-ignore
+Assets/TestScenes.meta          export-ignore
+Assets/TextMesh Pro             export-ignore
+Assets/TextMesh Pro.meta        export-ignore
+
+# All The other files.
+Assembly-CSharp.csproj              export-ignore
+EmptyUnityProject.sln               export-ignore
+IT4080_Assets.sln                   export-ignore
+My project.sln                      export-ignore
+Packages                            export-ignore
+ProjectSettings                     export-ignore
+README.md                           export-ignore
+UserSettings                        export-ignore
