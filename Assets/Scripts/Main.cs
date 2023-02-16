@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace it4080
 {
@@ -15,6 +16,8 @@ namespace it4080
         public It4080.NetworkSettings netSettings;
         public It4080.Chat chat;
 
+        private Button _btnStartGame;
+
         void Start()
         {
             netSettings.startClient += NetSettingsOnStartClient;
@@ -22,13 +25,27 @@ namespace it4080
             netSettings.startServer += NetSettingsOnStartServer;
             netSettings.setStatusText("Not Connected");
 
-            chat.sendMessage += ChatOnSendMessage;
+            //chat.sendMessage += ChatOnSendMessage;
+
+            _btnStart = GameObject.Find("BtnStartGame").GetComponent<Button>();
+            _btnStart.onClick.AddListener(BtnStartGameOnClick);
         }
 
-        private void ChatOnSendMessage(It4080.SendChatMessageServerRpc msg)
+        private void BtnStartGameOnClick()
         {
-            chat.RequestSendMessageServerRpc(msg.message);
+            StartGame();
         }
+
+        private void StartGame()
+        {
+            NetworkManager.SceneManager.LoadScene("Arena1",
+                UnityEngine.SceneManagement.LoadSceneMode.Single);
+        }
+
+       //private void ChatOnSendMessage(It4080.SendChatMessageServerRpc msg)
+       // {
+      //      chat.RequestSendMessageServerRpc(msg.message);
+       // }
 
         private void setupTransport(IPAddress ip, ushort port)
         {
