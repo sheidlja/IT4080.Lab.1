@@ -32,6 +32,7 @@ namespace it4080
 
             _btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
             _btnStartGame.onClick.AddListener(BtnStartGameOnClick);
+            _btnStartGame.gameObject.SetActive(false);
         }
 
         private void StartGame()
