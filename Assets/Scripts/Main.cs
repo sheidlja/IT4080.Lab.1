@@ -14,9 +14,12 @@ namespace it4080
         private NetworkManager netMgr;
 
         public It4080.NetworkSettings netSettings;
-        public It4080.Chat chat;
+        //public It4080.Chat chat;
 
         private Button _btnStartGame;
+        public Button btnClient;
+        public Button btnHost;
+        public Button btnServer;
 
         void Start()
         {
@@ -27,13 +30,8 @@ namespace it4080
 
             //chat.sendMessage += ChatOnSendMessage;
 
-            _btnStart = GameObject.Find("BtnStartGame").GetComponent<Button>();
-            _btnStart.onClick.AddListener(BtnStartGameOnClick);
-        }
-
-        private void BtnStartGameOnClick()
-        {
-            StartGame();
+            _btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
+            _btnStartGame.onClick.AddListener(BtnStartGameOnClick);
         }
 
         private void StartGame()
@@ -41,6 +39,12 @@ namespace it4080
             NetworkManager.SceneManager.LoadScene("Arena1",
                 UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
+
+        private void BtnStartGameOnClick()
+        {
+            StartGame();
+        }
+
 
        //private void ChatOnSendMessage(It4080.SendChatMessageServerRpc msg)
        // {
@@ -122,30 +126,30 @@ namespace it4080
             if (IsHost)
             {
                 netSettings.setStatusText($"Host Running.  We are client {NetworkManager.Singleton.LocalClientId}.");
-                chat.enabled = true;
-                chat.enable(true);
+                //chat.enabled = true;
+                //chat.enable(true);
             }
             else
             {
                 netSettings.setStatusText("Server Running");
             }
             // Displays locally for the host/server only.
-            chat.SystemMessage("Server/Host Started");
+            //chat.SystemMessage("Server/Host Started");
         }
 
         private void HostOnClientConnected(ulong clientId)
         {
             // Tell everyone that a new client connected
-            chat.SendSystemMessageServerRpc($"Client {clientId} connected.");
+            //chat.SendSystemMessageServerRpc($"Client {clientId} connected.");
             // Send the welcome message to the newly connected client only
-            chat.SendSystemMessageServerRpc(
+            /*chat.SendSystemMessageServerRpc(
                 MakeWelcomeMessage(clientId),
-                clientId);
+                clientId);*/
         }
 
         private void HostOnClientDisconnected(ulong clientId)
         {
-            chat.SendSystemMessageServerRpc($"Client {clientId} disconnected.");
+            //chat.SendSystemMessageServerRpc($"Client {clientId} disconnected.");
         }
 
         // ----------------------
@@ -154,18 +158,18 @@ namespace it4080
         private void ClientOnClientConnected(ulong clientId)
         {
             netSettings.setStatusText($"Connected as {clientId}");
-            chat.enabled = true;
-            chat.enable(true);
+            //chat.enabled = true;
+            //chat.enable(true);
         }
 
         private void ClientOnClientDisconnect(ulong clientId)
         {
             // Must manually create a system message in our chat control
             // here since we do not have a connection to the server.
-            chat.SystemMessage("Disconnected from Server.");
+            //chat.SystemMessage("Disconnected from Server.");
             netSettings.setStatusText("Connection Lost");
             netSettings.show();
-            chat.enable(false);
+            //chat.enable(false);
         }
 
         // ----------------------

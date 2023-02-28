@@ -3,18 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class ArenaManager : NetworkBehaviour
+namespace It4080
 {
-    public Player Player;
-    // Start is called before the first frame update
-    void Start()
+    public class ArenaManager : NetworkBehaviour
     {
-  
-    }
+        public Player Player;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            if (IsServer)
+            {
+                SpawnAllPlayers();
+            }
+        }
+
+        private Player SpawnPlayerForClient(ulong clientId)
+        {
+            Vector3 spawnPosition = new Vector3(0, 1, clientId * 5);
+            Player playerSpawn = Instantiate(Player, spawnPosition, Quaternion.identity);
+            playerSpawn.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
+            return playerSpawn;
+        }
+
+        private void SpawnAllPlayers()
+        {
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                SpawnPlayerForClient(clientId);
+            }
+        }
     }
 }

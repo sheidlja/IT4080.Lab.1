@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -134,4 +134,4 @@ namespace It4080
             txtChatLog.text += newMessage;
         }
     }
-}
+}*/
