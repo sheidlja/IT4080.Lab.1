@@ -892,9 +892,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1531346587}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f031ea389a76be42bf30387b28ddc02, type: 3}
+  m_Script: {fileID: 11500000, guid: 95754862aad9f1345956df01f35cc461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  netSettings: {fileID: 0}
+  btnClient: {fileID: 0}
+  btnHost: {fileID: 0}
+  btnServer: {fileID: 0}
 --- !u!4 &1531346589
 Transform:
   m_ObjectHideFlags: 0

@@ -34,5 +34,6 @@ namespace It4080
                 SpawnPlayerForClient(clientId);
             }
         }
+       
     }
 }

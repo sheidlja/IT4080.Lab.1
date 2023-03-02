@@ -54,7 +54,7 @@ namespace It4080
         // ----------------------
         private void BtnHostOnClick()
         {
-            if (populateVars())
+            if (startHost != null && populateVars())
             {
                 startHost.Invoke(ipAddress, port);
             }            

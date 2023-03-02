@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace it4080
 {
-    public class TestMain : NetworkBehaviour
+    public class Main : NetworkBehaviour
     {
         private NetworkManager netMgr;
 
@@ -23,6 +23,8 @@ namespace it4080
 
         void Start()
         {
+            Debug.Log("Start in Main.cs");
+            
             netSettings.startClient += NetSettingsOnStartClient;
             netSettings.startHost += NetSettingsOnStartHost;
             netSettings.startServer += NetSettingsOnStartServer;
