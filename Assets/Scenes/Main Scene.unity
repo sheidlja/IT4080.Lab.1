@@ -200,10 +200,15 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 27885046}
-    PlayerPrefab: {fileID: 4947723075610343091, guid: aedf94c069864c34683e16dcabf313b0, type: 3}
+    PlayerPrefab: {fileID: 0}
     NetworkPrefabs:
     - Override: 0
       Prefab: {fileID: 4947723075610343091, guid: aedf94c069864c34683e16dcabf313b0, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 1330163727720185419, guid: bfe7a672196ce78458feb4fb0fe8e1a5, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -595,6 +600,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7125ed4f9c72340aca2f7407a8a44140, type: 3}
+--- !u!114 &226414909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 401746771946667696, guid: 7125ed4f9c72340aca2f7407a8a44140, type: 3}
+  m_PrefabInstance: {fileID: 226414908}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dc07a70c28e14b879398f270c12aac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &284694679
 GameObject:
   m_ObjectHideFlags: 0
@@ -895,7 +911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95754862aad9f1345956df01f35cc461, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netSettings: {fileID: 0}
+  netSettings: {fileID: 226414909}
   btnClient: {fileID: 0}
   btnHost: {fileID: 0}
   btnServer: {fileID: 0}

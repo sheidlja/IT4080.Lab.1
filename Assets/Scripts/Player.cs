@@ -11,7 +11,9 @@ namespace It4080
 
         private float movementSpeed = 100f;
         private float rotationSpeed = 300f;
-        private float _camera;         
+        //private float _camera;
+        public BulletSpawner _bulletSpawner;
+        public Bullet BulletScript;
         
         private static Color[] availColors = new Color[]
         {
@@ -26,6 +28,14 @@ namespace It4080
 
         public override void OnNetworkSpawn()
         {
+            //_camera = transform.Find("Camera").GetComponent<Camera>();
+            //_camera.enabled = IsOwner;
+
+            //BulletSpawner = transform.Find("Cylinder").transform.Find("BulletSpawner").GetComponent<BulletSpawner>();
+            if (IsHost)
+            {
+                //BulletSpawner.BulletDamage.Value = 1;
+            }
             netPlayerColor.OnValueChanged += OnPlayerColorChanged;
         }
 
@@ -47,6 +57,7 @@ namespace It4080
             if (Input.GetButtonDown("Fire1"))
             {
                 RequestNextColorServerRpc();
+                //BulletSpawner.FireServerRPC(netPlayerColor.Value);
             }
         }
 
@@ -64,11 +75,51 @@ namespace It4080
 
         }
 
+        private void HostHandleBulletCollision(GameObject bullet)
+        {
+            Bullet BulletScript = bullet.GetComponent<Bullet>();
+            Destroy(bullet);
+            ulong ownerClientId = bullet.GetComponent<NetworkObject>().OwnerClientId;
+            Player otherPlayer = NetworkManager.Singleton.ConnectedClients[ownerClientId].PlayerObject.GetComponent<Player>();
+           //otherPlayer.Score.Value += BulletScript.Damage.Value;
+        }
+
+        private void HostHandlePowerUpPickup(Collider other)
+        {
+            if (!_bulletSpawner.IsAtMaxDamage())
+            {
+                _bulletSpawner.IncreaseDamage();
+                other.GetComponent<NetworkObject>().Despawn();
+            }
+        }
+
         [ServerRpc]
         public void RequestPositionForMovementServerRPC(Vector3 posChange, Vector3 rotChange, ServerRpcParams serverRpcParams = default)
         {
             transform.Translate(posChange);
             transform.Rotate(rotChange);
+        }
+
+        public void OnCollisionEnter(Collision collision)
+        {
+           if (IsHost)
+            {
+                if (collision.gameObject.CompareTag("Bullet"))
+                {
+                    HostHandleBulletCollision(collision.gameObject);
+                }
+            }
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+           if (IsHost)
+            {
+                if (other.gameObject.CompareTag("PowerUp"))
+                {
+                    HostHandlePowerUpPickup(other);
+                }
+            }
         }
 
         private Vector3 CalcMovementFromInput(float delta)

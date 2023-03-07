@@ -32,7 +32,7 @@ namespace it4080
 
             //chat.sendMessage += ChatOnSendMessage;
 
-            _btnStartGame = GameObject.Find("BtnStartGame").GetComponent<Button>();
+            _btnStartGame = GameObject.Find("StartGame").GetComponent<Button>();
             _btnStartGame.onClick.AddListener(BtnStartGameOnClick);
             _btnStartGame.gameObject.SetActive(false);
         }
@@ -45,6 +45,7 @@ namespace it4080
 
         private void BtnStartGameOnClick()
         {
+            Debug.Log("button pressed");
             StartGame();
         }
 
@@ -104,6 +105,8 @@ namespace it4080
             setupTransport(ip, port);
             NetworkManager.Singleton.StartHost();
             netSettings.hide();
+
+            _btnStartGame.gameObject.SetActive(true);
         }
 
         private void StartClient(IPAddress ip, ushort port)

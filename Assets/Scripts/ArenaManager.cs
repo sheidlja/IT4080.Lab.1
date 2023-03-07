@@ -7,7 +7,7 @@ namespace It4080
 {
     public class ArenaManager : NetworkBehaviour
     {
-        public Player Player;
+        public Player playerPrefab;
 
         public override void OnNetworkSpawn()
         {
@@ -22,7 +22,7 @@ namespace It4080
         private Player SpawnPlayerForClient(ulong clientId)
         {
             Vector3 spawnPosition = new Vector3(0, 1, clientId * 5);
-            Player playerSpawn = Instantiate(Player, spawnPosition, Quaternion.identity);
+            Player playerSpawn = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
             playerSpawn.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId);
             return playerSpawn;
         }
