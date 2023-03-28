@@ -11,9 +11,12 @@ namespace It4080
 
         private float movementSpeed = 100f;
         private float rotationSpeed = 300f;
-        //private float _camera;
         public BulletSpawner _bulletSpawner;
         public Bullet BulletScript;
+        public NetworkVariable<int> Score = new NetworkVariable<int>(5);
+
+        public TMPro.TMP_Text txtScoreDisplay;
+
         
         private static Color[] availColors = new Color[]
         {
@@ -28,15 +31,26 @@ namespace It4080
 
         public override void OnNetworkSpawn()
         {
-            //_camera = transform.Find("Camera").GetComponent<Camera>();
-            //_camera.enabled = IsOwner;
+            Camera camera;
+            camera = transform.Find("Camera").GetComponent<Camera>();
+            camera.enabled = IsOwner;
 
-            //BulletSpawner = transform.Find("Cylinder").transform.Find("BulletSpawner").GetComponent<BulletSpawner>();
+            Score.OnValueChanged += ClientOnScoreChanged;
+            DisplayScore();
+
+            txtScoreDisplay.text = $"P: {NetworkManager.Singleton.LocalClientId}";
+
+            _bulletSpawner = transform.Find("Cylinder").transform.Find("BulletSpawner").GetComponent<BulletSpawner>();
             if (IsHost)
             {
-                //BulletSpawner.BulletDamage.Value = 1;
+                _bulletSpawner.BulletDamage.Value = 1;
             }
             netPlayerColor.OnValueChanged += OnPlayerColorChanged;
+        }
+
+        private void ClientOnScoreChanged (int previous, int current)
+        {
+            DisplayScore();
         }
 
 
@@ -54,11 +68,19 @@ namespace It4080
 
         public void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (IsOwner)
             {
-                RequestNextColorServerRpc();
-                //BulletSpawner.FireServerRPC(netPlayerColor.Value);
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    //RequestNextColorServerRpc();
+                    _bulletSpawner.FireServerRPC();
+                }
             }
+        }
+
+        public void DisplayScore()
+        {
+            txtScoreDisplay.text = Score.Value.ToString();
         }
 
         [ServerRpc]
@@ -94,6 +116,13 @@ namespace It4080
         }
 
         [ServerRpc]
+        
+        public void RequestSetScoreServerRPC(int value)
+        {
+            Score.Value = value;
+        }
+
+        [ServerRpc]
         public void RequestPositionForMovementServerRPC(Vector3 posChange, Vector3 rotChange, ServerRpcParams serverRpcParams = default)
         {
             transform.Translate(posChange);
@@ -106,7 +135,9 @@ namespace It4080
             {
                 if (collision.gameObject.CompareTag("Bullet"))
                 {
+                    Score.Value -= 1;
                     HostHandleBulletCollision(collision.gameObject);
+                    Destroy(collision.gameObject);
                 }
             }
         }
