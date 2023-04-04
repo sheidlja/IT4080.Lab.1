@@ -142,9 +142,9 @@ namespace It4080
             return idx;
         }
 
-        private void ClientOnReadyClicked()
+        /*private void ClientOnReadyClicked()
         {
-            RequestSetReadyServerRpc();
-        }
+            RequestSetReadyServerRpc(info.isReady);
+        }*/
     }
 }
