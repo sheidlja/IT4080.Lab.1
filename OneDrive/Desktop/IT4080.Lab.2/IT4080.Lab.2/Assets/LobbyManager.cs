@@ -17,7 +17,6 @@ namespace It4080
         //public Player Player;
         public PlayerCard playerCard;
 
-        private NetworkList<PlayerData> allPlayers = new NetworkList<PlayerData>();
         private List<PlayerCard> playerCards = new List<PlayerCard>();
 
         public void Start()
@@ -42,7 +41,7 @@ namespace It4080
 
             if (IsClient && !IsHost)
             {
-                allPlayers.OnListChanged += ClientOnAllPlayersChanged;
+                NetworkHandler.Singleton.allPlayers.OnListChanged += ClientOnAllPlayersChanged;
                 btnStart.gameObject.SetActive(false);
             }
             txtPlayerNumber.text = $"Player #{NetworkManager.LocalClientId}";
@@ -60,10 +59,10 @@ namespace It4080
             It4080.PlayerData info = NetworkHandler.Singleton.allPlayers[playerIndex];
             info.isReady = isReady;
             NetworkHandler.Singleton.allPlayers[playerIndex] = info;
-            info = allPlayers[playerIndex];
+            info = NetworkHandler.Singleton.allPlayers[playerIndex];
 
             int readyCount = 0;
-            foreach (PlayerData readyData in allPlayers)
+            foreach (PlayerData readyData in NetworkHandler.Singleton.allPlayers)
             {
                 if (readyData.isReady)
                 {  
@@ -71,7 +70,7 @@ namespace It4080
                 }
             }
 
-            btnStart.enabled = readyCount == allPlayers.Count - 1;
+            btnStart.enabled = readyCount == NetworkHandler.Singleton.allPlayers.Count - 1;
         }
 
         //----------------------------------------
@@ -91,7 +90,7 @@ namespace It4080
        
         private void AddPlayerToList(ulong clientId)
         {
-            allPlayers.Add(new PlayerData(clientId, Color.red, false));
+            NetworkHandler.Singleton.allPlayers.Add(new PlayerData(clientId, Color.red, false));
         }
 
         private void AddPlayerCard (PlayerData info)
@@ -111,7 +110,7 @@ namespace It4080
             }
             playerCards.Clear();
 
-            foreach (PlayerData pi in allPlayers)
+            foreach (PlayerData pi in NetworkHandler.Singleton.allPlayers)
             {
                 AddPlayerCard(pi); 
             }
@@ -122,9 +121,9 @@ namespace It4080
             var idx = 0;
             var found = false;
 
-            while (idx < allPlayers.Count && !found)
+            while (idx < NetworkHandler.Singleton.allPlayers.Count && !found)
             {
-                if (allPlayers[idx].clientId == clientId)
+                if (NetworkHandler.Singleton.allPlayers[idx].clientId == clientId)
                 {
                     found = true;
                 }
