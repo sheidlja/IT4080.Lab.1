@@ -662,6 +662,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1915536242}
     m_Modifications:
+    - target: {fileID: 2627137188371384809, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137188371384809, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137188464037936, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137188464037936, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137188464037936, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137188464037936, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2627137189188493109, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -760,6 +784,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2627137189289472091, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137189953507603, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2627137189953507603, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2627137190287319533, guid: 4ae8966b97d50464b8f033568a38ea32, type: 3}

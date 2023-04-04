@@ -12,6 +12,7 @@ namespace It4080
         public GameObject playerScrollContent;
         public TMPro.TMP_Text txtPlayerNumber;
         public Button btnStart;
+        public Button btnReady;
 
         //public Player Player;
         public PlayerCard playerCard;
@@ -34,17 +35,44 @@ namespace It4080
             {
                 NetworkManager.Singleton.OnClientConnectedCallback += HostOnClientConnected;
                 //NetworkManager.Singleton.OnClientDisconnectCallback += HostOnClientDisconnected;
+                btnReady.gameObject.SetActive(false);
             }
 
             base.OnNetworkSpawn();
 
-            if (IsClient)
+            if (IsClient && !IsHost)
             {
                 allPlayers.OnListChanged += ClientOnAllPlayersChanged;
+                btnStart.gameObject.SetActive(false);
             }
             txtPlayerNumber.text = $"Player #{NetworkManager.LocalClientId}";
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void RequestSetReadyServerRpc(bool isReady, ServerRpcParams rpcParams = default)
+        {
+            if (IsHost)
+            {
+                return;
+            }
+            ulong clientId = rpcParams.Receive.SenderClientId;
+            int playerIndex = NetworkHandler.Singleton.FindPlayerIndex(clientId);
+            It4080.PlayerData info = NetworkHandler.Singleton.allPlayers[playerIndex];
+            info.isReady = isReady;
+            NetworkHandler.Singleton.allPlayers[playerIndex] = info;
+            info = allPlayers[playerIndex];
+
+            int readyCount = 0;
+            foreach (PlayerData readyData in allPlayers)
+            {
+                if (readyData.isReady)
+                {  
+                    readyCount += 1;
+                }
+            }
+
+            btnStart.enabled = readyCount == allPlayers.Count - 1;
+        }
 
         //----------------------------------------
         // EVENTS
@@ -56,13 +84,14 @@ namespace It4080
 
         private void HostOnClientConnected(ulong clientId)
         {
+            btnStart.enabled = false;
             AddPlayerToList(clientId);
             RefreshPlayerCards();
         }
        
         private void AddPlayerToList(ulong clientId)
         {
-            allPlayers.Add(new PlayerData(clientId, Color.red));
+            allPlayers.Add(new PlayerData(clientId, Color.red, false));
         }
 
         private void AddPlayerCard (PlayerData info)
@@ -70,6 +99,7 @@ namespace It4080
             PlayerCard newCard = Instantiate(playerCard);
             newCard.transform.SetParent(playerScrollContent.transform, false);
             newCard.SetPlayerName($"Player {info.clientId.ToString()}");
+            newCard.SetReady(info.isReady);
             playerCards.Add(newCard);
         }
 
@@ -110,6 +140,11 @@ namespace It4080
             }
 
             return idx;
+        }
+
+        private void ClientOnReadyClicked()
+        {
+            RequestSetReadyServerRpc();
         }
     }
 }
