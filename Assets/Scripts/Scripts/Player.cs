@@ -8,7 +8,7 @@ namespace It4080
 
     public class Player : NetworkBehaviour
     {
-        private float movementSpeed = 100f;
+        private float movementSpeed = 10f;
         private float rotationSpeed = 300f;
         private Camera _camera;
 
@@ -23,11 +23,12 @@ namespace It4080
         };
 
         public NetworkVariable<Color> netPlayerColor = new NetworkVariable<Color>();
-        public NetworkVariable<int> netScore = new NetworkVariable<int>(100);
+        public NetworkVariable<int> netScore = new NetworkVariable<int>(5);
         public BulletSpawner bulletSpawner;
         public NetworkVariable<int> netTeamID = new NetworkVariable<int>(-1);
         public NetworkVariable<bool> canMovePastWall = new NetworkVariable<bool> (false);
         public NetworkVariable<bool> ballsGrabbed = new NetworkVariable<bool>(false);
+        public TMPro.TMP_Text txtScoreDisplay;
 
 
         public override void OnNetworkSpawn()
@@ -35,14 +36,14 @@ namespace It4080
             _camera = transform.Find("Camera").GetComponent<Camera>();
             _camera.enabled = IsOwner;
 
-            netPlayerColor.OnValueChanged += OnPlayerColorChanged;
-            netPlayerColor.Value = availColors[serverColorIndex];
+            //netPlayerColor.OnValueChanged += OnPlayerColorChanged;
+            //netPlayerColor.Value = availColors[serverColorIndex];
             netScore.OnValueChanged += OnScoreChanged;
 
+            DisplayLives();
             UpdateScoreDisplay();
             ApplyPlayerColor();
         }
-
 
         void Update()
         {
@@ -51,16 +52,20 @@ namespace It4080
                 OwnerUpdate();
             }
         }
-
-
         // -------------------
         // Private
         // -------------------
         private void ApplyPlayerColor()
         {
-            GetComponent<MeshRenderer>().material.color = netPlayerColor.Value;
-            //transform.Find("LArm").GetComponent<MeshRenderer>().material.color = netPlayerColor.Value;
-            //transform.Find("RArm").GetComponent<MeshRenderer>().material.color = netPlayerColor.Value;
+            if (netTeamID.Value == 0)
+            {
+                GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material.color = Color.blue;
+            }
+            
         }
 
 
@@ -114,7 +119,7 @@ namespace It4080
             Vector3 rotateBy = CalcRotationFromInput(Time.deltaTime);
             RequestPositionForMovementServerRpc(moveBy, rotateBy);
 
-            if (ballsGrabbed.Value == false)
+            if (ballsGrabbed.Value == true)
             {
                 if (Input.GetButtonDown("Fire1") && Time.time > nextFire)
                 {
@@ -148,7 +153,7 @@ namespace It4080
             ulong owner = bullet.GetComponent<NetworkObject>().OwnerClientId;
             Player otherPlayer =
                 NetworkManager.Singleton.ConnectedClients[owner].PlayerObject.GetComponent<Player>();
-            otherPlayer.netScore.Value += 1;
+            //otherPlayer.netScore.Value += 1;
 
             Destroy(bullet);
         }
@@ -166,6 +171,7 @@ namespace It4080
         private void OnScoreChanged(int previous, int current)
         {
             UpdateScoreDisplay();
+            txtScoreDisplay.text = current.ToString();
         }
 
 
@@ -188,6 +194,14 @@ namespace It4080
                     ballsGrabbed.Value = true;
                 }
 
+            }
+        }
+
+        public void PlayerDeath(GameObject Player)
+        {
+            if (netScore.Value < 1)
+            {
+                Destroy(Player.gameObject);
             }
         }
 
@@ -230,6 +244,12 @@ namespace It4080
                 transform.Translate(allowedPosChange);
                 transform.Rotate(rotChange);
             }
+
+        }
+
+        public void DisplayLives()
+        {
+            txtScoreDisplay.text = netScore.Value.ToString();
         }
     }
 }

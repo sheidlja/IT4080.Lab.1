@@ -14,6 +14,7 @@ namespace It4080 {
                 // are destroyed by the server/host (server/host is the owner in this
                 // case) are destoryed on the clients.
                 Destroy(gameObject);
+                Debug.Log("balls grabbed");
             }
         }
     }
